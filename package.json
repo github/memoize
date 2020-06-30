@@ -1,0 +1,71 @@
+{
+  "name": "@github/memoize",
+  "version": "1.0.0",
+  "description": "A simple Memoize helper, with TypeScript decorator support!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github/memoize"
+  },
+  "license": "MIT",
+  "author": "GitHub Inc. (https://github.com)",
+  "files": [
+    "dist",
+    "!dist/test",
+    "!dist/umd/test",
+    "decorators"
+  ],
+  "main": "dist/umd/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prebuild": "npm run clean && npm run lint && mkdir dist",
+    "build": "npm run build-umd && npm run build-esm",
+    "build-esm": "tsc",
+    "build-umd": "tsc -m umd --outDir dist/umd",
+    "clean": "rm -rf dist",
+    "lint": "eslint --report-unused-disable-directives . --color --ext .js,.ts,.tsx && tsc --noEmit",
+    "prepublishOnly": "npm run build",
+    "test": "mocha -r ts-node/register --extension ts",
+    "postpublish": "npm publish --ignore-scripts --@github:registry='https://npm.pkg.github.com'"
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+      "plugin:github/browser",
+      "plugin:github/es6",
+      "plugin:github/typescript",
+      "plugin:escompat/recommended"
+    ],
+    "rules": {
+      "no-invalid-this": "off",
+      "no-shadow": "off"
+    },
+    "overrides": [
+      {
+        "files": "test/*",
+        "rules": {
+          "no-shadow": "off"
+        }
+      }
+    ]
+  },
+  "eslintIgnore": [
+    "dist/"
+  ],
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/chai-spies": "^1.0.1",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^14.0.14",
+    "@typescript-eslint/parser": "^2.34.0",
+    "chai": "^4.2.0",
+    "chai-spies": "^1.0.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-compat": "^3.8.0",
+    "eslint-plugin-escompat": "^1.1.0",
+    "eslint-plugin-github": "^3.4.1",
+    "mocha": "^7.2.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  }
+}
