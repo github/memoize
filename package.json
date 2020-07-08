@@ -28,6 +28,7 @@
     "test": "mocha -r ts-node/register --extension ts",
     "postpublish": "npm publish --ignore-scripts --@github:registry='https://npm.pkg.github.com'"
   },
+  "prettier": "@github/prettier-config",
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
     "extends": [
@@ -53,6 +54,7 @@
     "dist/"
   ],
   "devDependencies": {
+    "@github/prettier-config": "0.0.4",
     "@types/chai": "^4.2.11",
     "@types/chai-spies": "^1.0.1",
     "@types/mocha": "^7.0.2",
