@@ -14,7 +14,7 @@ export interface MemoizeOptions<A extends unknown[], R> {
 
 export type MemoizableFunction<A extends unknown[], R extends unknown, T extends unknown> = (this: T, ...args: A) => R
 
-export function defaultHash(...args: unknown[]) {
+export function defaultHash(...args: unknown[]): string {
   // JSON.stringify ellides `undefined` and function values by default. We do not want that.
   return JSON.stringify(args, (_: unknown, v: unknown) => (typeof v === 'object' ? v : String(v)))
 }
@@ -29,6 +29,7 @@ export default function memoize<A extends unknown[], R extends unknown, T extend
     if (cache.has(id)) return cache.get(id)
     const result = fn.apply(this, args)
     if (result instanceof Promise) {
+      // eslint-disable-next-line github/no-then
       result.catch(error => {
         cache.delete(id)
         throw error
