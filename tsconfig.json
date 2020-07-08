@@ -7,6 +7,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "target": "ES2016",
+    "module": "ESNext",
     "moduleResolution": "node",
     "declaration": true,
     "declarationMap": true,

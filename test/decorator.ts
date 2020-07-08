@@ -1,5 +1,4 @@
-import memoize from '../decorator'
-import {describe, it} from 'mocha'
+import memoize from '../decorator.js'
 import chai from 'chai'
 import spies from 'chai-spies'
 chai.use(spies)

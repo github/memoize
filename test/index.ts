@@ -1,6 +1,5 @@
 /* globals process */
-import memoize from '../index'
-import {beforeEach, describe, it} from 'mocha'
+import memoize from '../index.js'
 import chai from 'chai'
 import spies from 'chai-spies'
 chai.use(spies)
