@@ -1,5 +1,0 @@
-{
-  "type": "module",
-  "main": "../dist/decorator.js",
-  "module": "../dist/decorator.js"
-}

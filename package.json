@@ -9,17 +9,19 @@
   "license": "MIT",
   "author": "GitHub Inc. (https://github.com)",
   "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./decorator": "./dist/decorator.js"
+  },
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist",
-    "!dist/test",
-    "decorators"
+    "dist"
   ],
   "scripts": {
     "prebuild": "npm run clean && npm run lint && mkdir dist",
-    "build": "tsc",
+    "build": "tsc && rm -rf dist/test",
     "clean": "rm -rf dist",
     "lint": "eslint --report-unused-disable-directives . --color --ext .js,.ts,.tsx && tsc --noEmit",
     "prepublishOnly": "npm run build",
