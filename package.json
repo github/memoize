@@ -1,0 +1,81 @@
+{
+  "name": "@github/memoize",
+  "version": "1.0.0",
+  "description": "A simple Memoize helper, with TypeScript decorator support!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github/memoize"
+  },
+  "license": "MIT",
+  "author": "GitHub Inc. (https://github.com)",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./decorator": "./dist/decorator.js"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "npm run clean && npm run lint && mkdir dist",
+    "build": "tsc && rm -rf dist/test",
+    "clean": "rm -rf dist",
+    "lint": "eslint --report-unused-disable-directives . --color --ext .js,.ts,.tsx && tsc --noEmit",
+    "prepublishOnly": "npm run build",
+    "postpublish": "npm publish --ignore-scripts --@github:registry='https://npm.pkg.github.com'",
+    "test": "node --loader ts-node/esm.mjs node_modules/mocha/lib/cli/cli.js"
+  },
+  "prettier": "@github/prettier-config",
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "github"
+    ],
+    "extends": [
+      "plugin:github/browser",
+      "plugin:github/recommended",
+      "plugin:github/typescript",
+      "plugin:escompat/recommended"
+    ],
+    "rules": {
+      "no-invalid-this": "off",
+      "no-shadow": "off"
+    },
+    "overrides": [
+      {
+        "files": "test/*",
+        "rules": {
+          "no-shadow": "off"
+        }
+      }
+    ]
+  },
+  "eslintIgnore": [
+    "dist/"
+  ],
+  "mocha": {
+    "extension": [
+      "ts"
+    ]
+  },
+  "devDependencies": {
+    "@github/prettier-config": "0.0.4",
+    "@types/chai": "^4.2.11",
+    "@types/chai-spies": "^1.0.1",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^14.0.19",
+    "@typescript-eslint/parser": "^3.6.0",
+    "chai": "^4.2.0",
+    "chai-spies": "^1.0.0",
+    "eslint": "^7.4.0",
+    "eslint-plugin-compat": "^3.8.0",
+    "eslint-plugin-escompat": "^3.1.0",
+    "eslint-plugin-github": "^4.0.1",
+    "mocha": "^8.0.1",
+    "ts-node": "github:TypeStrong/ts-node#866bce6a175ec124fe62f269b22e91c92b40f875",
+    "typescript": "^3.9.6"
+  }
+}
