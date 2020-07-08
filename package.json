@@ -31,9 +31,12 @@
   "prettier": "@github/prettier-config",
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "github"
+    ],
     "extends": [
       "plugin:github/browser",
-      "plugin:github/es6",
+      "plugin:github/recommended",
       "plugin:github/typescript",
       "plugin:escompat/recommended"
     ],
@@ -53,21 +56,27 @@
   "eslintIgnore": [
     "dist/"
   ],
+  "mocha": {
+    "extension": [
+      "ts"
+    ],
+    "register": "ts-node/register"
+  },
   "devDependencies": {
     "@github/prettier-config": "0.0.4",
     "@types/chai": "^4.2.11",
     "@types/chai-spies": "^1.0.1",
     "@types/mocha": "^7.0.2",
-    "@types/node": "^14.0.14",
-    "@typescript-eslint/parser": "^2.34.0",
+    "@types/node": "^14.0.19",
+    "@typescript-eslint/parser": "^3.6.0",
     "chai": "^4.2.0",
     "chai-spies": "^1.0.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.4.0",
     "eslint-plugin-compat": "^3.8.0",
-    "eslint-plugin-escompat": "^1.1.0",
-    "eslint-plugin-github": "^3.4.1",
-    "mocha": "^7.2.0",
+    "eslint-plugin-escompat": "^3.1.0",
+    "eslint-plugin-github": "^4.0.1",
+    "mocha": "^8.0.1",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.6"
   }
 }
