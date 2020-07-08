@@ -59,8 +59,7 @@
   "mocha": {
     "extension": [
       "ts"
-    ],
-    "register": "ts-node/register"
+    ]
   },
   "devDependencies": {
     "@github/prettier-config": "0.0.4",
