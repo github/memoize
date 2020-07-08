@@ -1,4 +1,5 @@
 {
-  "main": "../dist/umd/decorator.js",
+  "type": "module",
+  "main": "../dist/decorator.js",
   "module": "../dist/decorator.js"
 }
