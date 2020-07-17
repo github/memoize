@@ -33,7 +33,7 @@ export default function memoize<A extends unknown[], R extends unknown, T extend
       result = result.catch(error => {
         cache.delete(id)
         throw error
-      })
+      }) as R
     }
     cache.set(id, result)
     return result
