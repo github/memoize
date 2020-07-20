@@ -58,3 +58,14 @@ Many memoize implementations exist. This one provides all of the utility we need
  - [memoize](https://www.npmjs.com/package/memoize)
  - [mem](https://www.npmjs.com/package/mem)
  - [lodash.memoize](https://www.npmjs.com/package/lodash.memoize)
+ 
+### Development
+
+```
+npm install
+npm test
+```
+
+### License
+
+Distributed under the MIT license. See LICENSE for details.
