@@ -28,14 +28,20 @@ export default function memoize<A extends unknown[], R extends unknown, T extend
     const id = hash.apply(this, args)
     if (cache.has(id)) return cache.get(id)
     const result = fn.apply(this, args)
-    cache.set(id, result)
-    if (result instanceof Promise) {
+
+    if (result instanceof Promise) {      
       // eslint-disable-next-line github/no-then
-      return result.catch(error => {
+      const resultWithCatch = result.catch(error => {
         cache.delete(id)
         throw error
       })
+
+      cache.set(id, resultWithCatch)
+      return resultWithCatch  
     }
-    return result
+    else {      
+      cache.set(id, result)  
+      return result          
+    }
   }
 }

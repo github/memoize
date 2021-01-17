@@ -2,14 +2,16 @@
 import memoize from '../index.js'
 import chai from 'chai'
 import spies from 'chai-spies'
+import chaiAsPromised from 'chai-as-promised'
 chai.use(spies)
+chai.use(chaiAsPromised)
 const {expect, spy} = chai
 const noop = () => null
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const incr = (i: number) => (_: unknown): number => i++
 
 describe('memoize', () => {
-  let fn = spy(incr(1))
+  let fn = spy(incr(1)) 
   let memoized = memoize(fn)
   beforeEach(() => {
     fn = spy(incr(1))
@@ -83,6 +85,42 @@ describe('memoize', () => {
       await Promise.resolve()
       expect(cache.delete).to.have.been.called.exactly(1).called.with.exactly(key)
       setTimeout(() => process.off('unhandledRejection', noop))
+    })
+
+    it('returns the same promise to new and memoized calls', () => {
+      const cache = new Map()
+      spy.on(cache, ['get', 'set', 'has', 'delete'])
+      const key = {}
+      const hash = spy(() => key)
+        
+      let asyncFn = spy(async function(cacheKey: string): Promise<string> {        
+        return new Promise<string>((resolveFn) => 
+        setTimeout( function() {
+          resolveFn(cacheKey)  
+        }, 250))
+      }) 
+
+      let m = memoize(asyncFn, {hash, cache})
+      var called = false
+      let p1 = m("1")
+      let p2 = m("1")      
+                  
+      expect([m("1"), p2]).to.eql([p1, p1])
+      expect(cache.set).to.have.been.called.exactly(1).called.with(key)
+
+      // make sure promise 'then' order is kept 
+      return Promise.all([
+        expect(p1.then(() => {    
+          let prevCalled = called
+          called = true  
+          return prevCalled
+        })).to.eventually.be.false,
+        expect(p2.then(() => {    
+          let prevCalled = called
+          called = true  
+          return prevCalled
+        })).to.eventually.be.true
+      ])
     })
   })
 })
