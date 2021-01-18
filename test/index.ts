@@ -92,40 +92,47 @@ describe('memoize', () => {
       spy.on(cache, ['get', 'set', 'has', 'delete'])
       const key = {}
       const hash = spy(() => key)
-        
-      let asyncFn = spy(async function(cacheKey: string): Promise<string> {        
-        return new Promise<string>((resolveFn) => 
-        setTimeout( function() {
-          resolveFn(cacheKey)  
-        }, 250))
-      }) 
 
-      let m = memoize(asyncFn, {hash, cache})      
-      var calledCount = 0
-      let p1 = m("1")
-      let p2 = m("1")      
-      let p3 = m("1")      
-                  
+      const asyncFn = spy(async function (cacheKey: string): Promise<string> {
+        return new Promise<string>(resolveFn =>
+          setTimeout(function () {
+            resolveFn(cacheKey)
+          }, 250)
+        )
+      })
+
+      const m = memoize(asyncFn, {hash, cache})
+      let calledCount = 0
+      const p1 = m('1')
+      const p2 = m('1')
+      const p3 = m('1')
+
       expect([p3, p2]).to.eql([p1, p1])
       expect(cache.set).to.have.been.called.exactly(1).called.with(key)
 
-      // make sure promise 'then' order is kept 
+      // make sure promise 'then' order is kept
       return Promise.all([
-        expect(p1.then(() => {    
-          let prevCalledCount = calledCount          
-          calledCount++
-          return prevCalledCount
-        })).to.eventually.eq(0),
-        expect(p2.then(() => {    
-          let prevCalledCount = calledCount          
-          calledCount++
-          return prevCalledCount
-        })).to.eventually.eq(1),
-        expect(p3.then(() => {    
-          let prevCalledCount = calledCount          
-          calledCount++
-          return prevCalledCount
-        })).to.eventually.eq(2),
+        expect(
+          p1.then(() => {
+            const prevCalledCount = calledCount
+            calledCount++
+            return prevCalledCount
+          })
+        ).to.eventually.eq(0),
+        expect(
+          p2.then(() => {
+            const prevCalledCount = calledCount
+            calledCount++
+            return prevCalledCount
+          })
+        ).to.eventually.eq(1),
+        expect(
+          p3.then(() => {
+            const prevCalledCount = calledCount
+            calledCount++
+            return prevCalledCount
+          })
+        ).to.eventually.eq(2)
       ])
     })
   })
