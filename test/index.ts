@@ -107,7 +107,9 @@ describe('memoize', () => {
       const p2 = m('1')
       const p3 = m('1')
 
-      expect([p3, p2]).to.eql([p1, p1])
+      expect(p2).to.equal(p1)
+      expect(p3).to.equal(p1)
+
       expect(cache.set).to.have.been.called.exactly(1).called.with(key)
 
       // make sure promise 'then' order is kept
