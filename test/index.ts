@@ -117,51 +117,5 @@ describe('memoize', () => {
       expect(cache.delete).to.have.been.called.exactly(1).called.with.exactly(key)
       setTimeout(() => process.off('unhandledRejection', noop))
     })
-
-    it('returns the same promise to new and memoized calls', async () => {
-      const cache = new Map()
-      spy.on(cache, ['set'])
-      const key = {}
-      const hash = spy(() => key)
-
-      const asyncFn = spy(async function (cacheKey: string): Promise<string> {
-        return new Promise<string>(resolveFn =>
-          setTimeout(function () {
-            resolveFn(cacheKey)
-          }, 250)
-        )
-      })
-
-      const m = memoize(asyncFn, {hash, cache})
-      let calledCount = 0
-      const p1 = m('1')
-      const p2 = m('1')
-      const p3 = m('1')
-
-      expect(cache.set).to.have.been.called.exactly(1).called.with(key)
-
-      expect(
-        await Promise.all([
-          (async () => {
-            await p1
-            const prevCalledCount = calledCount
-            calledCount++
-            return prevCalledCount
-          })(),
-          (async () => {
-            await p2
-            const prevCalledCount = calledCount
-            calledCount++
-            return prevCalledCount
-          })(),
-          (async () => {
-            await p3
-            const prevCalledCount = calledCount
-            calledCount++
-            return prevCalledCount
-          })()
-        ])
-      ).to.eql([0, 1, 2])
-    })
   })
 })
