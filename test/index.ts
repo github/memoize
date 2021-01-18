@@ -11,7 +11,7 @@ const noop = () => null
 const incr = (i: number) => (_: unknown): number => i++
 
 describe('memoize', () => {
-  let fn = spy(incr(1)) 
+  let fn = spy(incr(1))
   let memoized = memoize(fn)
   beforeEach(() => {
     fn = spy(incr(1))
