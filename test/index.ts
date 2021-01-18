@@ -100,26 +100,32 @@ describe('memoize', () => {
         }, 250))
       }) 
 
-      let m = memoize(asyncFn, {hash, cache})
-      var called = false
+      let m = memoize(asyncFn, {hash, cache})      
+      var calledCount = 0
       let p1 = m("1")
       let p2 = m("1")      
+      let p3 = m("1")      
                   
-      expect([m("1"), p2]).to.eql([p1, p1])
+      expect([p3, p2]).to.eql([p1, p1])
       expect(cache.set).to.have.been.called.exactly(1).called.with(key)
 
       // make sure promise 'then' order is kept 
       return Promise.all([
         expect(p1.then(() => {    
-          let prevCalled = called
-          called = true  
-          return prevCalled
-        })).to.eventually.be.false,
+          let prevCalledCount = calledCount          
+          calledCount++
+          return prevCalledCount
+        })).to.eventually.eq(0),
         expect(p2.then(() => {    
-          let prevCalled = called
-          called = true  
-          return prevCalled
-        })).to.eventually.be.true
+          let prevCalledCount = calledCount          
+          calledCount++
+          return prevCalledCount
+        })).to.eventually.eq(1),
+        expect(p3.then(() => {    
+          let prevCalledCount = calledCount          
+          calledCount++
+          return prevCalledCount
+        })).to.eventually.eq(2),
       ])
     })
   })
