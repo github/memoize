@@ -87,7 +87,7 @@ describe('memoize', () => {
 
     it('returns the same promise to new and memoized calls', async () => {
       const cache = new Map()
-      spy.on(cache, ['get', 'set', 'has', 'delete'])
+      spy.on(cache, ['set'])
       const key = {}
       const hash = spy(() => key)
 
