@@ -42,6 +42,15 @@ describe('memoize', () => {
     expect(fn).to.have.been.called.with.exactly(noop)
   })
 
+  it('returns the same Promise when called multiple times', async () => {
+    const memoized = memoize(a => Promise.resolve(a))
+    const p1 = memoized('1')
+    const p2 = memoized('1')
+    const p3 = memoized('1')
+    expect(p2).to.equal(p1)
+    expect(p3).to.equal(p1)
+  })
+
   describe('hash', () => {
     it('calls hash to get key for cache store', () => {
       let key = '1'
@@ -104,9 +113,6 @@ describe('memoize', () => {
       const p1 = m('1')
       const p2 = m('1')
       const p3 = m('1')
-
-      expect(p2).to.equal(p1)
-      expect(p3).to.equal(p1)
 
       expect(cache.set).to.have.been.called.exactly(1).called.with(key)
 
