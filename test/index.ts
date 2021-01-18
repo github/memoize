@@ -51,6 +51,30 @@ describe('memoize', () => {
     expect(p3).to.equal(p1)
   })
 
+  it('does not catch promises as a side-effect', async () => {
+    let failed = false
+    function setFailed() {
+      failed = true
+    }
+    process.on('unhandledRejection', setFailed)
+    const error = new Error('Rejected promise')
+    const memoized = memoize(() => Promise.reject(error))
+    let rejected = false
+    try {
+      await memoized()
+    } catch (e) {
+      if (e === error) {
+        rejected = true
+      } else {
+        throw e
+      }
+    }
+    expect(rejected).to.equal(true, 'Promise should reject when memoized')
+    await new Promise(setImmediate)
+    expect(failed).to.equal(false, 'Promise should not reject as a side effect')
+    process.off('unhandledRejection', setFailed)
+  })
+
   describe('hash', () => {
     it('calls hash to get key for cache store', () => {
       let key = '1'
