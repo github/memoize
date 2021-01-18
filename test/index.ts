@@ -87,7 +87,7 @@ describe('memoize', () => {
       setTimeout(() => process.off('unhandledRejection', noop))
     })
 
-    it('returns the same promise to new and memoized calls', () => {
+    it('returns the same promise to new and memoized calls', async () => {
       const cache = new Map()
       spy.on(cache, ['get', 'set', 'has', 'delete'])
       const key = {}
@@ -112,30 +112,28 @@ describe('memoize', () => {
 
       expect(cache.set).to.have.been.called.exactly(1).called.with(key)
 
-      // make sure promise 'then' order is kept
-      return Promise.all([
-        expect(
-          p1.then(() => {
+      expect(
+        await Promise.all([
+          (async () => {
+            await p1
             const prevCalledCount = calledCount
             calledCount++
             return prevCalledCount
-          })
-        ).to.eventually.eq(0),
-        expect(
-          p2.then(() => {
+          })(),
+          (async () => {
+            await p2
             const prevCalledCount = calledCount
             calledCount++
             return prevCalledCount
-          })
-        ).to.eventually.eq(1),
-        expect(
-          p3.then(() => {
+          })(),
+          (async () => {
+            await p3
             const prevCalledCount = calledCount
             calledCount++
             return prevCalledCount
-          })
-        ).to.eventually.eq(2)
-      ])
+          })()
+        ])
+      ).to.eql([0, 1, 2])
     })
   })
 })
