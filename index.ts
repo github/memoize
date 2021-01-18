@@ -37,11 +37,10 @@ export default function memoize<A extends unknown[], R extends unknown, T extend
       })
 
       cache.set(id, resultWithCatch)
-      return resultWithCatch  
-    }
-    else {      
-      cache.set(id, result)  
-      return result          
+      return resultWithCatch
+    } else {
+      cache.set(id, result)
+      return result
     }
   }
 }
