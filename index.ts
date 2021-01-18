@@ -29,7 +29,7 @@ export default function memoize<A extends unknown[], R extends unknown, T extend
     if (cache.has(id)) return cache.get(id)
     const result = fn.apply(this, args)
 
-    if (result instanceof Promise) {      
+    if (result instanceof Promise) {
       // eslint-disable-next-line github/no-then
       const resultWithCatch = result.catch(error => {
         cache.delete(id)
