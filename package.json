@@ -9,13 +9,23 @@
   "license": "MIT",
   "author": "GitHub Inc. (https://github.com)",
   "type": "module",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "exports": {
-    ".": "./dist/index.js",
-    "./decorator": "./dist/decorator.js"
+    ".": {
+      "module": "./dist/esm/index.js",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/esm/index.d.ts"
+    },
+    "./decorator": {
+      "module": "./dist/esm/decorator.js",
+      "import": "./dist/esm/decorator.js",
+      "require": "./dist/cjs/decorator.js",
+      "types": "./dist/esm/decorator.d.ts"
+    }
   },
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "./dist/esm/index.d.ts",
   "files": [
     "dist"
   ],
