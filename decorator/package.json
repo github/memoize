@@ -1,0 +1,7 @@
+{
+  "name": "@github/memoize/decorator",
+  "types": "../dist/esm/decorator.d.ts",
+  "main": "../dist/cjs/decorator.js",
+  "module": "../dist/esm/decorator.js",
+  "sideEffects": false
+}
