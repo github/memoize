@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "prebuild": "npm run clean && npm run lint && mkdir dist",
-    "build": "tsc && rm -rf dist/test",
+    "build": "tsc",
     "clean": "rm -rf dist",
     "lint": "eslint --report-unused-disable-directives . --color --ext .js,.ts,.tsx && tsc --noEmit",
     "prepublishOnly": "npm run build",
@@ -75,7 +75,7 @@
     "eslint-plugin-escompat": "^3.1.0",
     "eslint-plugin-github": "^4.0.1",
     "mocha": "^8.0.1",
-    "ts-node": "github:TypeStrong/ts-node#866bce6a175ec124fe62f269b22e91c92b40f875",
-    "typescript": "^3.9.6"
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.4"
   }
 }
