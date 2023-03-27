@@ -1,4 +1,3 @@
-
 export interface MemoizeOptions<A extends unknown[], R, H = unknown> {
   /**
    * Provides a single value to use as the Key for the memoization.
