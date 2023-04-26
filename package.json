@@ -39,7 +39,7 @@
     "lint": "eslint --report-unused-disable-directives . --color --ext .js,.ts,.tsx && tsc --noEmit",
     "prepublishOnly": "npm run build",
     "postpublish": "npm publish --ignore-scripts --@github:registry='https://npm.pkg.github.com'",
-    "test": "node --loader ts-node/esm.mjs node_modules/mocha/lib/cli/cli.js"
+    "test": "node node_modules/mocha/lib/cli/cli.js"
   },
   "prettier": "@github/prettier-config",
   "eslintConfig": {
