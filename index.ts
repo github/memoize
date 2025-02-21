@@ -1,3 +1,10 @@
+type MapLike<K, V> = {
+  set(key: K, value: V): void
+  get(key: K): V | undefined
+  has(key: K): boolean
+  delete(key: K): void
+}
+
 export interface MemoizeOptions<A extends unknown[], R, H = unknown> {
   /**
    * Provides a single value to use as the Key for the memoization.
@@ -9,7 +16,7 @@ export interface MemoizeOptions<A extends unknown[], R, H = unknown> {
    * The Cache implementation to provide. Must be a Map or Map-alike.
    * Defaults to a Map. Useful for replacing the cache with an LRU cache or similar.
    */
-  cache?: Map<H, R>
+  cache?: MapLike<H, R>
 }
 
 export type MemoizableFunction<A extends unknown[], R extends unknown, T extends unknown> = (this: T, ...args: A) => R
