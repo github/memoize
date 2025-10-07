@@ -8,7 +8,7 @@
     "noFallthroughCasesInSwitch": true,
     "target": "ES2016",
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "declaration": true,
     "declarationMap": true,
     "outDir": "dist/esm",
