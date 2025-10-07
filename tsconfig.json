@@ -8,11 +8,12 @@
     "noFallthroughCasesInSwitch": true,
     "target": "ES2016",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "declaration": true,
     "declarationMap": true,
     "outDir": "dist/esm",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "skipLibCheck": true
   },
   "exclude": ["test", "dist"]
 }

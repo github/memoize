@@ -1,8 +1,5 @@
 import memoize from '../decorator.js'
-import chai from 'chai'
-import spies from 'chai-spies'
-chai.use(spies)
-const {expect} = chai
+import {describe, it, expect} from 'vitest'
 
 describe('memoize decorator', () => {
   it('works when called with no arguments', () => {
@@ -18,8 +15,8 @@ describe('memoize decorator', () => {
       }
     }
     const incr = new Incr()
-    expect([incr.incr('a'), incr.incr('a')]).to.eql([1, 1])
-    expect([incr.incr('b'), incr.incr('b')]).to.eql([2, 2])
+    expect([incr.incr('a'), incr.incr('a')]).toEqual([1, 1])
+    expect([incr.incr('b'), incr.incr('b')]).toEqual([2, 2])
   })
 
   it('works with given hash option', () => {
@@ -37,9 +34,9 @@ describe('memoize decorator', () => {
       }
     }
     const incr = new Incr()
-    expect([incr.incr('a'), incr.incr('b')]).to.eql([1, 1])
+    expect([incr.incr('a'), incr.incr('b')]).toEqual([1, 1])
     key = 'b'
-    expect([incr.incr('a'), incr.incr('b')]).to.eql([2, 2])
+    expect([incr.incr('a'), incr.incr('b')]).toEqual([2, 2])
   })
 
   it('works with given hash option', () => {
@@ -59,9 +56,9 @@ describe('memoize decorator', () => {
       }
     }
     const incr = new Incr()
-    expect([incr.incr('a'), incr.incr('b')]).to.eql([1, 1])
+    expect([incr.incr('a'), incr.incr('b')]).toEqual([1, 1])
     cache.set(hash('a'), 2)
     cache.set(hash('b'), 2)
-    expect([incr.incr('a'), incr.incr('b')]).to.eql([2, 2])
+    expect([incr.incr('a'), incr.incr('b')]).toEqual([2, 2])
   })
 })
