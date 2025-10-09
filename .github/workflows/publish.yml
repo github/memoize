@@ -18,7 +18,6 @@ jobs:
           node-version: 24
           registry-url: https://registry.npmjs.org/
           cache: npm
-      - run: npx playwright install chromium
       - run: npm ci
       - run: npm test
       - run: npm run build
