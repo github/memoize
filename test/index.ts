@@ -1,45 +1,42 @@
 /* globals process */
 import memoize from '../index.js'
-import chai from 'chai'
-import spies from 'chai-spies'
-chai.use(spies)
-const {expect, spy} = chai
+import {describe, it, beforeEach, expect, vi} from 'vitest'
 const noop = () => null
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const incr = (i: number) => (_: unknown): number => i++
 
 describe('memoize', () => {
-  let fn = spy(incr(1))
+  let fn = vi.fn(incr(1))
   let memoized = memoize(fn)
   beforeEach(() => {
-    fn = spy(incr(1))
+    fn = vi.fn(incr(1))
     memoized = memoize(fn)
   })
 
   it('calls the callback only once with repeated arguments', () => {
-    expect([memoized(1), memoized(1), memoized(1), memoized(1)]).to.eql([1, 1, 1, 1])
-    expect(fn).to.have.been.called.exactly(1).called.with.exactly(1)
+    expect([memoized(1), memoized(1), memoized(1), memoized(1)]).toEqual([1, 1, 1, 1])
+    expect(fn).toHaveBeenCalledTimes(1)
+    expect(fn).toHaveBeenCalledWith(1)
   })
 
   it('calls the callback different times with different inputs', () => {
-    expect([memoized(1), memoized(2), memoized(3), memoized(4)]).to.eql([1, 2, 3, 4])
-    expect(fn)
-      .to.have.been.called.exactly(4)
-      .and.called.with.exactly(1)
-      .and.called.with.exactly(2)
-      .and.called.with.exactly(3)
-      .and.called.with.exactly(4)
+    expect([memoized(1), memoized(2), memoized(3), memoized(4)]).toEqual([1, 2, 3, 4])
+    expect(fn).toHaveBeenCalledTimes(4)
+    expect(fn).toHaveBeenCalledWith(1)
+    expect(fn).toHaveBeenCalledWith(2)
+    expect(fn).toHaveBeenCalledWith(3)
+    expect(fn).toHaveBeenCalledWith(4)
   })
 
   it('differentiates undefined/null/true/0/function', () => {
     const calls = [memoized(undefined), memoized(null), memoized(true), memoized(0), memoized(noop)]
-    expect(calls).to.eql([1, 2, 3, 4, 5])
-    expect(fn).to.have.been.called.exactly(5)
-    expect(fn).to.have.been.called.with.exactly(undefined)
-    expect(fn).to.have.been.called.with.exactly(null)
-    expect(fn).to.have.been.called.with.exactly(true)
-    expect(fn).to.have.been.called.with.exactly(0)
-    expect(fn).to.have.been.called.with.exactly(noop)
+    expect(calls).toEqual([1, 2, 3, 4, 5])
+    expect(fn).toHaveBeenCalledTimes(5)
+    expect(fn).toHaveBeenCalledWith(undefined)
+    expect(fn).toHaveBeenCalledWith(null)
+    expect(fn).toHaveBeenCalledWith(true)
+    expect(fn).toHaveBeenCalledWith(0)
+    expect(fn).toHaveBeenCalledWith(noop)
   })
 
   it('returns the same Promise when called multiple times', async () => {
@@ -47,8 +44,8 @@ describe('memoize', () => {
     const p1 = memoized('1')
     const p2 = memoized('1')
     const p3 = memoized('1')
-    expect(p2).to.equal(p1)
-    expect(p3).to.equal(p1)
+    expect(p2).toBe(p1)
+    expect(p3).toBe(p1)
   })
 
   it('does not catch promises as a side-effect', async () => {
@@ -69,52 +66,60 @@ describe('memoize', () => {
         throw e
       }
     }
-    expect(rejected).to.equal(true, 'Promise should reject when memoized')
+    expect(rejected).toBe(true)
     await new Promise(setImmediate)
-    expect(failed).to.equal(false, 'Promise should not reject as a side effect')
+    expect(failed).toBe(false)
     process.off('unhandledRejection', setFailed)
   })
 
   describe('hash', () => {
     it('calls hash to get key for cache store', () => {
       let key = '1'
-      const hash = spy(() => key)
+      const hash = vi.fn(() => key)
       memoized = memoize(fn, {hash})
-      expect([memoized(null), memoized(null)]).to.eql([1, 1])
-      expect(fn).to.have.been.called.exactly(1)
-      expect(hash).to.have.been.called.exactly(2)
-      expect(hash).to.have.been.called.always.with.exactly(null)
+      expect([memoized(null), memoized(null)]).toEqual([1, 1])
+      expect(fn).toHaveBeenCalledTimes(1)
+      expect(hash).toHaveBeenCalledTimes(2)
+      expect(hash).toHaveBeenCalledWith(null)
       key = '2'
-      expect(memoized(null)).to.equal(2)
-      expect(fn).to.have.been.called.exactly(2)
+      expect(memoized(null)).toBe(2)
+      expect(fn).toHaveBeenCalledTimes(2)
     })
   })
 
   describe('cache option', () => {
     it('uses `has`/`get`/`set` on the Cache implementation', () => {
       const cache = new Map()
-      spy.on(cache, ['get', 'set', 'has'])
+      const hasSpy = vi.spyOn(cache, 'has')
+      const getSpy = vi.spyOn(cache, 'get')
+      const setSpy = vi.spyOn(cache, 'set')
       const key = {}
-      const hash = spy(() => key)
+      const hash = vi.fn(() => key)
       memoized = memoize(fn, {hash, cache})
-      expect([memoized(null), memoized(null)]).to.eql([1, 1])
-      expect(cache.has).to.have.been.called.exactly(2).called.with.exactly(key)
-      expect(cache.get).to.have.been.called.exactly(1).called.with.exactly(key)
-      expect(cache.set).to.have.been.called.exactly(1).called.with.exactly(key, 1)
+      expect([memoized(null), memoized(null)]).toEqual([1, 1])
+      expect(hasSpy).toHaveBeenCalledTimes(2)
+      expect(hasSpy).toHaveBeenCalledWith(key)
+      expect(getSpy).toHaveBeenCalledTimes(1)
+      expect(getSpy).toHaveBeenCalledWith(key)
+      expect(setSpy).toHaveBeenCalledTimes(1)
+      expect(setSpy).toHaveBeenCalledWith(key, 1)
     })
 
     it('calls `delete` to evict rejected Promises', async () => {
       process.on('unhandledRejection', noop)
       const cache = new Map()
-      spy.on(cache, ['get', 'set', 'has', 'delete'])
+      const setSpy = vi.spyOn(cache, 'set')
+      const deleteSpy = vi.spyOn(cache, 'delete')
       const key = {}
-      const hash = spy(() => key)
-      const reject = spy(() => Promise.reject(new Error('example')))
+      const hash = vi.fn(() => key)
+      const reject = vi.fn(() => Promise.reject(new Error('example')))
       memoized = memoize(reject, {hash, cache})
-      expect(memoized(null)).to.be.a('promise')
-      expect(cache.set).to.have.been.called.exactly(1).called.with(key)
+      expect(memoized(null)).toBeInstanceOf(Promise)
+      expect(setSpy).toHaveBeenCalledTimes(1)
+      expect(setSpy).toHaveBeenCalledWith(key, expect.any(Promise))
       await Promise.resolve()
-      expect(cache.delete).to.have.been.called.exactly(1).called.with.exactly(key)
+      expect(deleteSpy).toHaveBeenCalledTimes(1)
+      expect(deleteSpy).toHaveBeenCalledWith(key)
       setTimeout(() => process.off('unhandledRejection', noop))
     })
   })
