@@ -37,45 +37,22 @@
     "build:cjs": "tsc --module commonjs --outDir dist/cjs && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
     "clean": "rm -rf dist",
     "lint": "eslint --report-unused-disable-directives . --color --ext .js,.ts,.tsx && tsc --noEmit",
+    "lint:fix": "eslint --report-unused-disable-directives . --color --ext .js,.ts,.tsx --fix",
     "prepublishOnly": "npm run build",
     "test": "vitest run"
   },
   "prettier": "@github/prettier-config",
-  "eslintConfig": {
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "github"
-    ],
-    "extends": [
-      "plugin:github/browser",
-      "plugin:github/recommended",
-      "plugin:github/typescript",
-      "plugin:escompat/recommended"
-    ],
-    "rules": {
-      "no-invalid-this": "off",
-      "no-shadow": "off"
-    },
-    "overrides": [
-      {
-        "files": "test/*",
-        "rules": {
-          "no-shadow": "off"
-        }
-      }
-    ]
-  },
-  "eslintIgnore": [
-    "dist/"
-  ],
   "devDependencies": {
-    "@github/prettier-config": "0.0.4",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.37.0",
+    "@github/prettier-config": "0.0.6",
     "@types/node": "^22.18.8",
-    "@typescript-eslint/parser": "^3.6.0",
-    "eslint": "^6.0.0",
-    "eslint-plugin-compat": "^3.5.1",
+    "@typescript-eslint/parser": "^8.46.0",
+    "eslint": "^9.37.0",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-compat": "^6.0.2",
     "eslint-plugin-escompat": "^3.1.0",
-    "eslint-plugin-github": "^4.0.1",
+    "eslint-plugin-github": "^5.1.8",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   }

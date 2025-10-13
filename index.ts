@@ -21,7 +21,7 @@ export function defaultHash<A extends unknown[], H extends unknown>(...args: A):
 
 export default function memoize<A extends unknown[], R extends unknown, T extends unknown, H extends unknown>(
   fn: MemoizableFunction<A, R, T>,
-  opts: MemoizeOptions<A, R, H> = {}
+  opts: MemoizeOptions<A, R, H> = {},
 ): MemoizableFunction<A, R, T> {
   const {hash = defaultHash, cache = new Map<H, R>()} = opts
   return function (this: T, ...args: A): R {

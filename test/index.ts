@@ -2,8 +2,12 @@
 import memoize from '../index.js'
 import {describe, it, beforeEach, expect, vi} from 'vitest'
 const noop = () => null
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const incr = (i: number) => (_: unknown): number => i++
+
+const incr =
+  (i: number) =>
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  (_: unknown): number =>
+    i++
 
 describe('memoize', () => {
   let fn = vi.fn(incr(1))
@@ -40,10 +44,10 @@ describe('memoize', () => {
   })
 
   it('returns the same Promise when called multiple times', async () => {
-    const memoized = memoize(a => Promise.resolve(a))
-    const p1 = memoized('1')
-    const p2 = memoized('1')
-    const p3 = memoized('1')
+    const memo = memoize(a => Promise.resolve(a))
+    const p1 = memo('1')
+    const p2 = memo('1')
+    const p3 = memo('1')
     expect(p2).toBe(p1)
     expect(p3).toBe(p1)
   })
@@ -55,10 +59,10 @@ describe('memoize', () => {
     }
     process.on('unhandledRejection', setFailed)
     const error = new Error('Rejected promise')
-    const memoized = memoize(() => Promise.reject(error))
+    const memo = memoize(() => Promise.reject(error))
     let rejected = false
     try {
-      await memoized()
+      await memo()
     } catch (e) {
       if (e === error) {
         rejected = true
