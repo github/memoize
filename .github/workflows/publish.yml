@@ -26,6 +26,4 @@ jobs:
           npm version ${TAG_NAME} --git-tag-version=false
         env:
           TAG_NAME: ${{github.event.release.tag_name}}
-      - run: npm whoami; npm --ignore-scripts publish  --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      - run: npm --ignore-scripts publish --provenance
