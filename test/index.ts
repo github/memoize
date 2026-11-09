@@ -92,6 +92,24 @@ describe('memoize', () => {
   })
 
   describe('cache option', () => {
+    it('keeps a replacement cache entry when an evicted promise rejects', async () => {
+      const cache = new Map<string, Promise<string>>()
+      let rejectFirst!: (reason: Error) => void
+      const first = new Promise<string>((_, reject) => {
+        rejectFirst = reject
+      })
+      const callback = vi.fn().mockReturnValueOnce(first).mockResolvedValue('replacement')
+      const memo = memoize(callback, {cache, hash: () => 'key'})
+      const pending = memo()
+      cache.delete('key')
+      const replacement = memo()
+      rejectFirst(new Error('evicted request failed'))
+      await expect(pending).rejects.toThrow('evicted request failed')
+      expect(memo()).toBe(replacement)
+      expect(await replacement).toBe('replacement')
+      expect(callback).toHaveBeenCalledTimes(2)
+    })
+
     it('uses `has`/`get`/`set` on the Cache implementation', () => {
       const cache = new Map()
       const hasSpy = vi.spyOn(cache, 'has')
