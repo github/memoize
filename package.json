@@ -36,7 +36,7 @@
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir dist/cjs && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
     "clean": "rm -rf dist",
-    "lint": "eslint --report-unused-disable-directives . --color --ext .js,.ts,.tsx && tsc --noEmit",
+    "lint": "eslint --report-unused-disable-directives . --color --ext .js,.ts,.tsx && tsc --noEmit && tsc -p test/standard",
     "lint:fix": "eslint --report-unused-disable-directives . --color --ext .js,.ts,.tsx --fix",
     "prepublishOnly": "npm run build",
     "test": "vitest run"

@@ -29,7 +29,7 @@ const other = memoize(function doExpensiveStuff() {}, {
 
 ### TypeScript Decorators Support!
 
-This package also includes a decorator module which can be used to provide [TypeScript Decorator](https://www.typescriptlang.org/docs/handbook/decorators.html#decorators) annotations to functions.
+This package also includes a decorator module which can be used to provide decorator annotations to methods. The decorator works with both TypeScript's legacy [`experimentalDecorators`](https://www.typescriptlang.org/docs/handbook/decorators.html) and [standard decorators](https://github.com/tc39/proposal-decorators) (TypeScript 5.0+ without `experimentalDecorators`, or Babel/SWC with the `2023-11` decorators version). Both modes wrap the method on the prototype, so all instances of a class share one cache.
 
 Here's an example, showing what you need to do:
 
