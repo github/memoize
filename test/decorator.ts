@@ -61,4 +61,16 @@ describe('memoize decorator', () => {
     cache.set(hash('b'), 2)
     expect([incr.incr('a'), incr.incr('b')]).toEqual([2, 2])
   })
+
+  it('shares one cache across instances', () => {
+    class Named {
+      constructor(private name: string) {}
+      @memoize()
+      greet(greeting: string) {
+        return `${greeting} ${this.name}`
+      }
+    }
+    expect(new Named('a').greet('hi')).toEqual('hi a')
+    expect(new Named('b').greet('hi')).toEqual('hi a')
+  })
 })
