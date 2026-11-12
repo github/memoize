@@ -10,18 +10,30 @@ export interface MethodDecoratorContext {
   readonly name: string | symbol
 }
 
+// `unknown` when `hash` can be called with the method's arguments. Otherwise an object type that the decorator's
+// arguments can't satisfy, so a mismatched `hash` fails at the decorator and the error names the method's arguments.
+type HashAccepts<A extends unknown[], F> = F extends (...args: infer P) => unknown
+  ? ((...args: A) => unknown) extends (...args: P) => unknown
+    ? unknown
+    : {'`hash` must accept the method arguments': P}
+  : unknown
+
 /**
  * A method decorator that works with both TypeScript's legacy `experimentalDecorators` and standard (TC39)
  * decorators.
  */
-export interface MemoizeDecorator<T> {
-  <F extends (...args: never[]) => unknown>(method: F, context: MethodDecoratorContext): F
-  (target: T, propertyKey: string | symbol, descriptor: PropertyDescriptor): void
+export interface MemoizeDecorator<A extends unknown[], R, T> {
+  <F extends (...args: never[]) => R>(method: F, context: MethodDecoratorContext & HashAccepts<A, F>): F
+  <F extends (...args: never[]) => R>(
+    target: T,
+    propertyKey: (string | symbol) & HashAccepts<A, F>,
+    descriptor: TypedPropertyDescriptor<F>,
+  ): void
 }
 
 export default function memoize<A extends unknown[], R, T>(
   memoizeOptions: MemoizeOptions<A, R> = {},
-): MemoizeDecorator<T> {
+): MemoizeDecorator<A, R, T> {
   return ((targetOrMethod: unknown, keyOrContext: unknown, descriptor?: PropertyDescriptor) => {
     // Standard decorators pass the method and a context object; legacy decorators pass the prototype, the
     // member name and its property descriptor.
@@ -35,5 +47,5 @@ export default function memoize<A extends unknown[], R, T>(
     descriptor!.value = memo(descriptor!.value as MemoizableFunction<A, R, T>, memoizeOptions)
     Object.defineProperty(targetOrMethod, keyOrContext as string | symbol, descriptor!)
     return undefined
-  }) as MemoizeDecorator<T>
+  }) as MemoizeDecorator<A, R, T>
 }

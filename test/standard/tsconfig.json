@@ -5,6 +5,6 @@
     "target": "ES2022",
     "noEmit": true
   },
-  "include": ["*.ts"],
+  "include": ["*.ts", "../types/*.ts"],
   "exclude": []
 }

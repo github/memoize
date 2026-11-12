@@ -62,38 +62,15 @@ describe('memoize decorator', () => {
     expect([incr.incr('a'), incr.incr('b')]).toEqual([2, 2])
   })
 
-  // Standard (TC39) decorators receive the method and a context object. The test build uses
-  // `experimentalDecorators`, so these call the decorator the way the standard runtime does.
-  describe('standard decorators', () => {
-    const methodContext = {kind: 'method', name: 'incr', static: false, private: false} as ClassMethodDecoratorContext
-
-    it('memoizes the method, keeping `this`', () => {
-      class Incr {
-        i = 1
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        incr(_: unknown) {
-          return this.i++
-        }
+  it('shares one cache across instances', () => {
+    class Named {
+      constructor(private name: string) {}
+      @memoize()
+      greet(greeting: string) {
+        return `${greeting} ${this.name}`
       }
-      const incr = new Incr()
-      const memoized = memoize()(Incr.prototype.incr, methodContext)
-      expect([memoized.call(incr, 'a'), memoized.call(incr, 'a')]).toEqual([1, 1])
-      expect([memoized.call(incr, 'b'), memoized.call(incr, 'b')]).toEqual([2, 2])
-    })
-
-    it('uses the given cache', () => {
-      const cache = new Map()
-      cache.set(JSON.stringify(['a']), 5)
-      const one = (key: string) => key.length
-      const memoized = memoize({cache})(one, methodContext)
-      expect(memoized('a')).toEqual(5)
-    })
-
-    it('rejects members that are not methods', () => {
-      const field: unknown = {kind: 'field', name: 'incr', static: false, private: false}
-      expect(() => memoize()(() => 1, field as ClassMethodDecoratorContext)).toThrow(
-        'memoize can only decorate methods',
-      )
-    })
+    }
+    expect(new Named('a').greet('hi')).toEqual('hi a')
+    expect(new Named('b').greet('hi')).toEqual('hi a')
   })
 })
